@@ -40,10 +40,10 @@ class HashTable {
 
     set(key, value){
         let address = this._hash(key);
-        let data = this.data[address];
+        let dataAddress = this.data[address]; // can be stored in variable -> see GET()
 
         if(this.data[address] !== undefined){
-            data.push([key, value]);
+            this.data[address].push([key, value]);
         }else{
             this.data[address] = [[key, value]];
         }
@@ -52,17 +52,34 @@ class HashTable {
 
     get(key){
         let address = this._hash(key);
-        
 
-        if(this.data[address].length === 1){
-            return this.data[address][0][1];
+        let dataAddress = this.data[address];
+
+        if(dataAddress.length === 1){
+            return dataAddress[0][1];
         }
 
         for(let i = 0; i < this.data[address].length; i++){
-            if(key === this.data[address][i][0]){
-                return this.data[address][i][1];
+            if(key === dataAddress[i][0]){
+                return dataAddress[i][1];
             }
         }   
+    }
+
+    keys(){
+        let keys = [];
+        for(let i = 0; i < this.data.length; i++){
+            if(this.data[i] && this.data[i].length === 1){
+                keys.push(this.data[i][0][0]);
+                continue;
+            }
+
+            for(let j = 0; j < this.data[i].length; j++){
+                keys.push(this.data[i][j][0]);
+            }
+        }
+
+        return keys;
     }
 
 }
@@ -79,5 +96,6 @@ console.log(hashTable.get('roger'));
 console.log(hashTable.get('richard'));
 console.log(hashTable.get('nick'));
 console.log(hashTable.get('syd'));
-
+console.log('--------------');
+console.log(hashTable.keys());
 
