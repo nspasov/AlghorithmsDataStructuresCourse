@@ -1,0 +1,83 @@
+let user = {
+    age: 54,
+    name: 'Noer',
+    magic: true,
+    scream: function(){
+        console.log('AAAH');
+    }
+}
+
+user.age; // O(1)
+user.spell = 'abra kadabra'; // O(1)
+user.scream(); // O(1)
+delete user.spell; // O(1)
+
+const map = new Map();
+const set = new Set();
+
+set.add('a');
+set.add('b');
+
+for(let item of set){
+   // console.log(item)
+}
+
+// ---------------------------------------------
+
+class HashTable {
+
+    constructor(size){
+        this.data = new Array(size);
+    }
+
+    _hash(key){
+        let hash = 0;
+        for(let i = 0; i < key.length; i++){
+            hash = (hash + key.charCodeAt(i) * i) % this.data.length;
+        }
+        return hash;
+    }
+
+    set(key, value){
+        let address = this._hash(key);
+        let data = this.data[address];
+
+        if(this.data[address] !== undefined){
+            data.push([key, value]);
+        }else{
+            this.data[address] = [[key, value]];
+        }
+
+    }
+
+    get(key){
+        let address = this._hash(key);
+        
+
+        if(this.data[address].length === 1){
+            return this.data[address][0][1];
+        }
+
+        for(let i = 0; i < this.data[address].length; i++){
+            if(key === this.data[address][i][0]){
+                return this.data[address][i][1];
+            }
+        }   
+    }
+
+}
+
+let hashTable = new HashTable(3);
+hashTable.set('david', 'gilmour');
+hashTable.set('roger', 'waters');
+hashTable.set('richard', 'wright');
+hashTable.set('nick', 'mason');
+hashTable.set('syd', 'barrett');
+console.log(hashTable);
+console.log(hashTable.get('david'));
+console.log(hashTable.get('roger'));
+console.log(hashTable.get('richard'));
+console.log(hashTable.get('nick'));
+console.log(hashTable.get('syd'));
+
+
