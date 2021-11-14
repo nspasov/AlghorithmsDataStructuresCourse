@@ -17,4 +17,6 @@ function findDuplicate(arr){
     }
 }
 
-console.log(findDuplicate([2,3,4,5]));
+
+
+console.log(findDuplicate([2,3,4,1,2,5]));
