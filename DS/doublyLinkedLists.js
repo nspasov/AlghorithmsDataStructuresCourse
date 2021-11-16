@@ -1,91 +1,93 @@
-// 10 ---> 5 ---> 16
 
-let linkedList = {
-    head: {
-        value: 10,
-        next: {
+
+let doublyLinkedList = {
+    head:{
+        value:10,
+        previous: null,
+        next:{
             value: 5,
-            next: {
+            previous: `Reference to value 10`,
+            next:{
                 value: 16,
+                previous: `Reference to value 5`,
                 next: null
             }
         }
     }
 }
 
-// Class we use to create a new  Data Node when inserting into the linked list 
 class Node{
     constructor(value){
         this.value = value;
+        this.previous = null;
         this.next = null;
     }
 }
 
-class LinkedList {
+class DoublyLinkedList {
     constructor(value){
         this.head = {
-            value : value,
-            next : null
+            value: value,
+            previous: null,
+            next: null
         }
+
         this.tail = this.head;
         this.length = 1;
     }
 
     append(value){
         const newNode = new Node(value);
-
+        newNode.next = null;
         this.tail.next = newNode;
+        newNode.previous = this.tail;
         this.tail = newNode;
         this.length++;
         return this;
     }
 
     prepend(value){
+        
         const newNode = new Node(value);
-
+        newNode.previous = null;
         newNode.next = this.head;
-        this.head = newNode;
+        this.head.previous = newNode;
+        this.head = newNode
         this.length++;
         return this;
     }
 
     insert(index, value){
-        const newNode = new Node(value);
-        let counter = 0;
-        let currentNode = this.head;
+        if(index === 0){
+            return this.prepend(value);
+        }
 
         if(index >= this.length){
             return this.append(value);
         }
 
-        if(index === 0){
-            return this.prepend(value);
-            
-        }
+        const newNode = new Node(value);
+        let currentNode = this.head;
+        let counter = 0;
 
-        while(counter <= index){
-
+        while(counter < index){
 
             if(counter === index-1){
                 newNode.next = currentNode.next;
+                currentNode.next.previous = newNode;
                 currentNode.next = newNode;
+                newNode.previous = currentNode;
                 this.length++;
                 break;
             }
 
             currentNode = currentNode.next;
             counter++;
-
         }
-
         return newNode;
     }
 
     remove(index){
-
-        let counter = 0;
-        let currentNode = this.head;
-
         if(index >= this.length){
             return;
         }
@@ -95,39 +97,28 @@ class LinkedList {
             return this.head = this.head.next;
         }
 
-        while(counter < index){
-            if(counter === index-1){
-                if(index === this.length-1){
-                    currentNode.next = null;
-                    break;
-                }
+        let counter = 0;
+        let currentNode = this.head;
 
+        while(counter < index){
+
+            if(counter === index-1){
                 currentNode.next = currentNode.next.next;
+                currentNode.next.next.previous.previous = currentNode;
+                this.length--;
+                break;
             }
 
             currentNode = currentNode.next;
             counter++;
         }
-
-    }
-
-    printList(){
-        const array = [];
-        let currentNode = this.head;
-        while(currentNode !== null){
-            array.push(currentNode.value);
-            currentNode = currentNode.next;
-        }
-        return array;
     }
 }
 
-let myLinkedList = new LinkedList(10);
-myLinkedList.append(5);
-myLinkedList.append(16);
-myLinkedList.prepend(2);
-myLinkedList.insert(4,15);
-myLinkedList.remove(4);
-console.log(myLinkedList.printList());
-
-
+let myDoublyLinkedList = new DoublyLinkedList(10);
+myDoublyLinkedList.append(5);
+myDoublyLinkedList.prepend(2);
+myDoublyLinkedList.prepend(6);
+myDoublyLinkedList.insert(2,4);
+myDoublyLinkedList.remove(1);
+console.log(myDoublyLinkedList);
